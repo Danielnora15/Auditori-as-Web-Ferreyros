@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Salud Web - Club de Operadores | thejuju.agency</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Identidad Visual mantenida */
+            --primary-color: #0b86a2;
+            --highlight-color: #d5f355;
+            --dark-text: #2c3e50;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--white);
+            color: var(--dark-text);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%);
+            padding: 4rem 0;
+            border-bottom: 5px solid var(--highlight-color);
+        }
+
+        .score-card-main {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            /* Gradiente para reflejar un puntaje de ~58% (Rojo/Naranja) */
+            background: conic-gradient(var(--danger-color) 0% 58%, #e0e0e0 58% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .score-circle::after {
+            content: '';
+            width: 130px;
+            height: 130px;
+            background: var(--white);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .score-number {
+            position: relative;
+            z-index: 2;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+
+        .score-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Dashboard Cards */
+        .metric-card {
+            border: none;
+            border-radius: 15px;
+            background: var(--white);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .bg-icon-perf {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        .bg-icon-seo {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .bg-icon-access {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .bg-icon-best {
+            background-color: rgba(11, 134, 162, 0.1);
+            color: var(--primary-color);
+        }
+
+        /* Accordion Customization */
+        .accordion-item {
+            border: 1px solid #eee;
+            border-radius: 10px !important;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-button {
+            background-color: #fff;
+            color: var(--dark-text);
+            font-weight: 600;
+            padding: 1.2rem;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(11, 134, 162, 0.05);
+            color: var(--primary-color);
+            box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .125);
+        }
+
+        .nav-tabs .nav-link {
+            color: #666;
+            border: none;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Severity Badges */
+        .badge-critical {
+            background-color: #ffebee;
+            color: var(--danger-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+
+        .badge-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+
+        .badge-info {
+            background-color: #e3f2fd;
+            color: #0c5460;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+
+        /* Good Job List */
+        .good-job-list li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .check-icon {
+            color: var(--success-color);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .highlight-text {
+            background-color: var(--highlight-color);
+            padding: 0 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="position: fixed; top: 20px; left: 20px; z-index: 9999;">
+        <a href="../index.html"
+            style="background: #0b86a2; color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 14px;">
+            ← Volver al Panel
+        </a>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <span class="badge bg-light text-dark mb-2 border">thejuju.agency</span>
+                    <h1>Diagnóstico de Experiencia Digital</h1>
+                    <p class="subtitle mb-4">Análisis para: <strong>https://www.cluboperadores.com</strong><br>Fecha: 15
+                        de Diciembre, 2025</p>
+
+                    <div class="card border-0 bg-light p-4">
+                        <h4 class="mb-3">👋 Resumen Ejecutivo</h4>
+                        <p class="lead" style="font-size: 1.1rem;">
+                            ¡Hola equipo del Club! Su comunidad digital es un recurso valioso. Sin embargo, los datos
+                            muestran que la web es <span class="highlight-text">pesada en móviles</span>, lo que
+                            dificulta que los operadores accedan a beneficios o noticias desde sus celulares en obra.
+                            Aligerar la carga de scripts y optimizar el tiempo de respuesta del servidor son claves para
+                            aumentar el registro de socios.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="score-card-main">
+                        <h3>Puntaje Global</h3>
+                        <div class="score-circle">
+                            <span class="score-number">58</span>
+                        </div>
+                        <div class="score-label">Estado: Requiere Atención</div>
+                        <p class="mt-3 text-muted small">El rendimiento móvil está afectando la experiencia de usuario
+                            general.</p>
+                        <a href="#action-plan" class="btn btn-dark mt-2"
+                            style="background-color: var(--primary-color); border:none;">Ver Plan de Mejora 👇</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DASHBOARD VISUAL -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold" style="color: var(--primary-color);">Tu Comunidad de un Vistazo</h2>
+
+            <div class="row g-4 mb-5">
+                <!-- Card 1: Rendimiento -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card p-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="icon-box bg-icon-perf"><i class="bi bi-speedometer2"></i></div>
+                            <span class="fw-bold fs-4 text-danger">42/100</span>
+                        </div>
+                        <h5 class="fw-bold">Velocidad Móvil</h5>
+                        <p class="small text-muted mb-0">Tiempo de carga lento debido a scripts de terceros y respuesta
+                            del servidor.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: SEO -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card p-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="icon-box bg-icon-seo"><i class="bi bi-search"></i></div>
+                            <span class="fw-bold fs-4 text-success">88/100</span>
+                        </div>
+                        <h5 class="fw-bold">Visibilidad SEO</h5>
+                        <p class="small text-muted mb-0">Contenido bien estructurado y fácil de encontrar para los
+                            operadores.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Accesibilidad -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card p-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="icon-box bg-icon-access"><i class="bi bi-people"></i></div>
+                            <span class="fw-bold fs-4 text-warning">72/100</span>
+                        </div>
+                        <h5 class="fw-bold">Usabilidad</h5>
+                        <p class="small text-muted mb-0">Botones de registro pequeños y formularios difíciles de llenar
+                            en pantallas chicas.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Buenas Prácticas -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="metric-card p-4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="icon-box bg-icon-best"><i class="bi bi-shield-check"></i></div>
+                            <span class="fw-bold fs-4" style="color: var(--primary-color);">90/100</span>
+                        </div>
+                        <h5 class="fw-bold">Seguridad</h5>
+                        <p class="small text-muted mb-0">Plataforma segura y confiable para los datos de los socios.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Radar Chart Section -->
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h5 class="mb-3 text-muted">Balance de Métricas</h5>
+                    <div class="chart-container mx-auto" style="max-width: 500px;">
+                        <canvas id="auditRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACTION PLAN SECTION -->
+    <section id="action-plan" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge bg-warning text-dark mb-2">Hoja de Ruta</span>
+                <h2 class="fw-bold" style="color: var(--primary-color);">Tu Plan de Acción Priorizado</h2>
+                <p class="text-muted">Optimizaciones enfocadas en mejorar la experiencia del socio.</p>
+            </div>
+
+            <div class="accordion" id="accordionPlan">
+
+                <!-- FINDING 1: Third-Party Code (Critical) -->
+                <div class="accordion-item shadow-sm">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <span class="badge-critical">🔴 Crítico</span>
+                            Reducir el impacto de código de terceros (Scripts de Tracking/Social)
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionPlan">
+                        <div class="accordion-body">
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs mb-3" id="tab1" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="meaning1-tab" data-bs-toggle="tab"
+                                        data-bs-target="#meaning1" type="button" role="tab">🤔 ¿Qué significa?</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="impact1-tab" data-bs-toggle="tab"
+                                        data-bs-target="#impact1" type="button" role="tab">🎯 ¿Por qué me
+                                        afecta?</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="fix1-tab" data-bs-toggle="tab" data-bs-target="#fix1"
+                                        type="button" role="tab">🛠️ ¿Cómo lo soluciono?</button>
+                                </li>
+                            </ul>
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade show active" id="meaning1" role="tabpanel">
+                                    <p class="lead">Tu sitio web carga muchas herramientas externas (ej. Facebook Pixel,
+                                        Google Analytics, Chatbots, Widgets de YouTube) antes de mostrar el contenido
+                                        principal.</p>
+                                    <p>Es como si invitaras a alguien a pasar, pero el portero, el recepcionista y el
+                                        vendedor de seguros lo detuvieran en la puerta antes de entrar.</p>
+                                </div>
+                                <div class="tab-pane fade" id="impact1" role="tabpanel">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">📱 <strong>Bloqueo Móvil:</strong> Los celulares de
+                                            gama media (comunes en campo) se "congelan" procesando estos scripts.</li>
+                                        <li class="list-group-item">📉 <strong>Menos Registros:</strong> Si el
+                                            formulario tarda en estar listo, el usuario abandona el proceso.</li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade" id="fix1" role="tabpanel">
+                                    <h5>Pasos Técnicos:</h5>
+                                    <ol>
+                                        <li class="mb-2"><strong>Auditoría de Scripts:</strong> ¿Realmente necesitas
+                                            cargar el widget de Facebook en todas las páginas? Limítalo donde no sea
+                                            esencial.</li>
+                                        <li class="mb-2"><strong>Carga Diferida (Defer):</strong> Configura estos
+                                            scripts para que carguen <em>después</em> de que el usuario ya pueda ver y
+                                            leer el sitio.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FINDING 2: Server Response (Important) -->
+                <div class="accordion-item shadow-sm">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <span class="badge-warning">🟡 Importante</span>
+                            Tiempo de respuesta del servidor lento (TTFB)
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionPlan">
+                        <div class="accordion-body">
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs mb-3" id="tab2" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="meaning2-tab" data-bs-toggle="tab"
+                                        data-bs-target="#meaning2" type="button" role="tab">🤔 ¿Qué significa?</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="impact2-tab" data-bs-toggle="tab"
+                                        data-bs-target="#impact2" type="button" role="tab">🎯 Experiencia de
+                                        Usuario</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="fix2-tab" data-bs-toggle="tab" data-bs-target="#fix2"
+                                        type="button" role="tab">🛠️ Solución</button>
+                                </li>
+                            </ul>
+                            <!-- Tab Content -->
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade show active" id="meaning2" role="tabpanel">
+                                    <p>Cuando alguien hace clic en "Club de Operadores", el navegador envía una señal a
+                                        tu servidor. Actualmente, tu servidor se toma "un descanso" largo antes de
+                                        enviar el primer dato de vuelta.</p>
+                                </div>
+                                <div class="tab-pane fade" id="impact2" role="tabpanel">
+                                    <p>Esto crea una sensación de lentitud general que no se arregla optimizando
+                                        imágenes. Es el motor el que está arrancando lento.</p>
+                                </div>
+                                <div class="tab-pane fade" id="fix2" role="tabpanel">
+                                    <p><strong>Posibles causas y soluciones:</strong></p>
+                                    <ul>
+                                        <li>Si usas WordPress u otro CMS, revisa plugins desactualizados que consuman
+                                            recursos.</li>
+                                        <li>Implementa <strong>Caché de Página</strong> para servir versiones estáticas
+                                            a los visitantes en lugar de generar la página desde cero cada vez.</li>
+                                        <li>Considera mejorar el plan de hosting si el tráfico ha crecido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FINDING 3: Efficient Caching (Optimization) -->
+                <div class="accordion-item shadow-sm">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <span class="badge-info">🟢 Optimización</span>
+                            Servir recursos estáticos con una política de caché eficiente
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                        data-bs-parent="#accordionPlan">
+                        <div class="accordion-body">
+                            <!-- Tabs -->
+                            <ul class="nav nav-tabs mb-3" id="tab3" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="meaning3-tab" data-bs-toggle="tab"
+                                        data-bs-target="#meaning3" type="button" role="tab">🤔 ¿Qué significa?</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="impact3-tab" data-bs-toggle="tab"
+                                        data-bs-target="#impact3" type="button" role="tab">🎯 Ahorro de Datos</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="fix3-tab" data-bs-toggle="tab" data-bs-target="#fix3"
+                                        type="button" role="tab">🛠️ Solución</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content p-3">
+                                <div class="tab-pane fade show active" id="meaning3" role="tabpanel">
+                                    <p>Tu logo, imágenes de fondo y archivos de estilo no cambian a menudo. Debes
+                                        decirle al navegador del usuario: "Guarda esto en tu memoria por un año, no me
+                                        lo pidas cada vez que entres".</p>
+                                </div>
+                                <div class="tab-pane fade" id="impact3" role="tabpanel">
+                                    <p>Esto hace que las visitas repetidas (de tus socios fieles) sean instantáneas,
+                                        ahorrando sus datos móviles.</p>
+                                </div>
+                                <div class="tab-pane fade" id="fix3" role="tabpanel">
+                                    <p>Configurar los encabezados de <code>Cache-Control</code> en el servidor para que
+                                        los archivos estáticos tengan una vida útil larga (ej. 1 año o 365 días).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GOOD JOB SECTION -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="fw-bold mb-4">¡Puntos Fuertes del Club! 🌟</h2>
+                    <p class="mb-4">Hay bases sólidas sobre las cuales construir la comunidad:</p>
+                    <ul class="list-unstyled good-job-list">
+                        <li><i class="bi bi-check-circle-fill check-icon"></i> <strong>Adaptabilidad
+                                (Responsive):</strong> El contenido se reacomoda bien en diferentes pantallas.</li>
+                        <li><i class="bi bi-check-circle-fill check-icon"></i> <strong>HTTPS Seguro:</strong> La
+                            información de los socios viaja encriptada.</li>
+                        <li><i class="bi bi-check-circle-fill check-icon"></i> <strong>Estructura de Contenido:</strong>
+                            Buen uso de títulos para organizar la información.</li>
+                        <li><i class="bi bi-check-circle-fill check-icon"></i> <strong>Sin Plugins Obsoletos:</strong>
+                            No detectamos uso de Flash o tecnologías incompatibles.</li>
+                    </ul>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1256/1256650.png" alt="Community Success"
+                        style="max-width: 250px; opacity: 0.9;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p class="mb-1">Reporte generado por <strong>thejuju.agency</strong> para Club de Operadores</p>
+            <small>&copy; 2025 - Análisis basado en estándares Google PageSpeed Insights.</small>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Inicializar Gráfico Radar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('auditRadarChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Velocidad', 'SEO', 'Usabilidad', 'Buenas Prácticas', 'Seguridad'],
+                    datasets: [{
+                        label: 'Puntaje Club',
+                        data: [42, 88, 72, 90, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(213, 243, 85, 0.4)', // Color destacado con transparencia
+                        borderColor: '#0b86a2', // Color primario
+                        pointBackgroundColor: '#0b86a2',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#0b86a2'
+                    }]
+                },
+                options: {
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true,
+                                color: '#eee'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: {
+                                stepSize: 20,
+                                backdropColor: 'transparent',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
